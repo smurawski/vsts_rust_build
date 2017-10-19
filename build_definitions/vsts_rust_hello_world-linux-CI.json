@@ -1,0 +1,177 @@
+{
+    "variables": {
+        "system.debug": {
+            "value": "false",
+            "allowOverride": true
+        }
+    },
+    "retentionRules": [
+        {
+            "branches": [
+                "+refs/heads/*"
+            ],
+            "artifacts": [],
+            "artifactTypesToDelete": [
+                "FilePath",
+                "SymbolStore"
+            ],
+            "daysToKeep": 10,
+            "minimumToKeep": 1,
+            "deleteBuildRecord": true,
+            "deleteTestResults": true
+        }
+    ],
+    "jobAuthorizationScope": 1,
+    "jobTimeoutInMinutes": 60,
+    "jobCancelTimeoutInMinutes": 5,
+    "process": {
+        "phases": [
+            {
+                "dependencies": [],
+                "steps": [
+                    {
+                        "environment": {},
+                        "enabled": true,
+                        "continueOnError": false,
+                        "alwaysRun": false,
+                        "displayName": "Install Rust",
+                        "timeoutInMinutes": 0,
+                        "condition": "succeeded()",
+                        "refName": "ShellScript1",
+                        "task": {
+                            "id": "6c731c3c-3c68-459a-a5c9-bde6e6595b5b",
+                            "versionSpec": "2.*",
+                            "definitionType": "task"
+                        },
+                        "inputs": {
+                            "scriptPath": "./install.sh",
+                            "args": "",
+                            "disableAutoCwd": "false",
+                            "cwd": "",
+                            "failOnStandardError": "false"
+                        }
+                    },
+                    {
+                        "environment": {},
+                        "enabled": true,
+                        "continueOnError": false,
+                        "alwaysRun": false,
+                        "displayName": "Check Syntax",
+                        "timeoutInMinutes": 0,
+                        "condition": "succeeded()",
+                        "refName": "ShellScript2",
+                        "task": {
+                            "id": "6c731c3c-3c68-459a-a5c9-bde6e6595b5b",
+                            "versionSpec": "2.*",
+                            "definitionType": "task"
+                        },
+                        "inputs": {
+                            "scriptPath": "./format.sh",
+                            "args": "",
+                            "disableAutoCwd": "false",
+                            "cwd": "",
+                            "failOnStandardError": "false"
+                        }
+                    },
+                    {
+                        "environment": {},
+                        "enabled": true,
+                        "continueOnError": false,
+                        "alwaysRun": false,
+                        "displayName": "Run Tests",
+                        "timeoutInMinutes": 0,
+                        "condition": "succeeded()",
+                        "refName": "ShellScript3",
+                        "task": {
+                            "id": "6c731c3c-3c68-459a-a5c9-bde6e6595b5b",
+                            "versionSpec": "2.*",
+                            "definitionType": "task"
+                        },
+                        "inputs": {
+                            "scriptPath": "./test.sh",
+                            "args": "",
+                            "disableAutoCwd": "false",
+                            "cwd": "",
+                            "failOnStandardError": "false"
+                        }
+                    },
+                    {
+                        "environment": {},
+                        "enabled": true,
+                        "continueOnError": false,
+                        "alwaysRun": false,
+                        "displayName": "Build",
+                        "timeoutInMinutes": 0,
+                        "condition": "succeeded()",
+                        "refName": "ShellScript4",
+                        "task": {
+                            "id": "6c731c3c-3c68-459a-a5c9-bde6e6595b5b",
+                            "versionSpec": "2.*",
+                            "definitionType": "task"
+                        },
+                        "inputs": {
+                            "scriptPath": "./build.sh",
+                            "args": "",
+                            "disableAutoCwd": "false",
+                            "cwd": "",
+                            "failOnStandardError": "false"
+                        }
+                    },
+                    {
+                        "environment": {},
+                        "enabled": true,
+                        "continueOnError": false,
+                        "alwaysRun": false,
+                        "displayName": "Publish Artifact: Release Build",
+                        "timeoutInMinutes": 0,
+                        "condition": "succeeded()",
+                        "refName": "PublishBuildArtifacts4",
+                        "task": {
+                            "id": "2ff763a7-ce83-4e1f-bc89-0ae63477cebe",
+                            "versionSpec": "1.*",
+                            "definitionType": "task"
+                        },
+                        "inputs": {
+                            "PathtoPublish": "./target/release/",
+                            "ArtifactName": "drop",
+                            "ArtifactType": "Container",
+                            "TargetPath": "\\\\my\\share\\$(Build.DefinitionName)\\$(Build.BuildNumber)",
+                            "Parallel": "false",
+                            "ParallelCount": "8"
+                        }
+                    }
+                ],
+                "variables": {},
+                "name": "Phase 1",
+                "target": {
+                    "demands": [],
+                    "executionOptions": {
+                        "type": 0
+                    },
+                    "type": 1
+                },
+                "jobAuthorizationScope": "projectCollection",
+                "jobCancelTimeoutInMinutes": 1
+            }
+        ],
+        "type": 1
+    },
+    "processParameters": {},
+    "quality": 1,
+    "drafts": [],
+    "repository": {},
+    "queue": {
+        "id": 195,
+        "name": "Hosted Linux Preview",
+        "pool": {
+            "id": 3,
+            "name": "Hosted Linux Preview",
+            "isHosted": true
+        }
+    },
+    "id": 51,
+    "name": "vsts_rust_hello_world-linux-CI",
+    "path": "\\",
+    "type": 2,
+    "queueStatus": 0
+}
